@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 600">
+  <rect width="900" height="600" fill="#e7f6ed"/>
+  <rect x="80" y="80" width="740" height="440" rx="18" fill="#ffffff"/>
+  <path d="M120 420 300 250l120 120 90-80 270 130v60H120z" fill="#0f7a45" opacity=".88"/>
+  <circle cx="650" cy="180" r="54" fill="#c89b3c"/>
+  <text x="450" y="535" text-anchor="middle" font-family="Arial, sans-serif" font-size="36" font-weight="700" fill="#064b2c">PAC IPNU IPPNU</text>
+</svg>
+
