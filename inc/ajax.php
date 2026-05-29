@@ -47,6 +47,10 @@ function pacipnuippnu_handle_file_upload( $field, $allowed_mimes = array() ) {
 function pacipnuippnu_ajax_request_surat() {
 	pacipnuippnu_verify_ajax_nonce();
 
+	if ( ! is_user_logged_in() ) {
+		wp_send_json_error( array( 'message' => __( 'Silakan login terlebih dahulu untuk mengajukan surat.', 'pac-ipnu-ippnu' ) ), 401 );
+	}
+
 	if ( ! empty( $_POST['website'] ) ) {
 		wp_send_json_error( array( 'message' => __( 'Permohonan ditolak karena terindikasi spam.', 'pac-ipnu-ippnu' ) ), 400 );
 	}
