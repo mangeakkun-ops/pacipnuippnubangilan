@@ -75,16 +75,32 @@
 		});
 	}
 
+	function getSavedThemeMode() {
+		try {
+			return window.localStorage.getItem('pac-theme-mode');
+		} catch (error) {
+			return null;
+		}
+	}
+
+	function saveThemeMode(mode) {
+		try {
+			window.localStorage.setItem('pac-theme-mode', mode);
+		} catch (error) {
+			// Storage can be unavailable in private browsing or restricted embeds.
+		}
+	}
+
 	function initDarkMode() {
 		const buttons = $$('[data-theme-toggle]');
-		const saved = localStorage.getItem('pac-theme-mode');
+		const saved = getSavedThemeMode();
 		if (saved === 'dark') {
 			document.body.classList.add('dark-mode');
 		}
 		buttons.forEach((button) => {
 			button.addEventListener('click', () => {
 				document.body.classList.toggle('dark-mode');
-				localStorage.setItem('pac-theme-mode', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+				saveThemeMode(document.body.classList.contains('dark-mode') ? 'dark' : 'light');
 			});
 		});
 	}
@@ -105,14 +121,14 @@
 			return;
 		}
 
-		const dots = slides.map((_, index) => {
+		const dots = dotsWrap ? slides.map((_, index) => {
 			const dot = document.createElement('button');
 			dot.type = 'button';
 			dot.setAttribute('aria-label', `Slide ${index + 1}`);
 			dot.addEventListener('click', () => goTo(index));
 			dotsWrap.appendChild(dot);
 			return dot;
-		});
+		}) : [];
 
 		function render() {
 			slides.forEach((slide, index) => slide.classList.toggle('is-active', index === active));
@@ -267,8 +283,15 @@
 			link.addEventListener('click', (event) => {
 				event.preventDefault();
 				const overlay = document.createElement('div');
+				const closeButton = document.createElement('button');
+				const image = document.createElement('img');
 				overlay.className = 'lightbox';
-				overlay.innerHTML = `<button type="button" aria-label="Tutup">&times;</button><img src="${link.href}" alt="">`;
+				closeButton.type = 'button';
+				closeButton.setAttribute('aria-label', 'Tutup');
+				closeButton.textContent = '×';
+				image.src = link.href;
+				image.alt = '';
+				overlay.append(closeButton, image);
 				document.body.appendChild(overlay);
 				document.body.style.overflow = 'hidden';
 				const close = () => {

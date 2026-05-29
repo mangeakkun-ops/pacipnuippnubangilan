@@ -220,10 +220,15 @@ function pacipnuippnu_save_meta_boxes( $post_id ) {
 	$post_type = get_post_type( $post_id );
 
 	if ( 'agenda' === $post_type ) {
+		$status = isset( $_POST['pac_agenda_status'] ) ? sanitize_key( wp_unslash( $_POST['pac_agenda_status'] ) ) : 'upcoming';
+		if ( ! in_array( $status, array( 'upcoming', 'ongoing', 'completed', 'cancelled' ), true ) ) {
+			$status = 'upcoming';
+		}
+
 		update_post_meta( $post_id, '_pac_agenda_date', isset( $_POST['pac_agenda_date'] ) ? sanitize_text_field( wp_unslash( $_POST['pac_agenda_date'] ) ) : '' );
 		update_post_meta( $post_id, '_pac_agenda_time', isset( $_POST['pac_agenda_time'] ) ? sanitize_text_field( wp_unslash( $_POST['pac_agenda_time'] ) ) : '' );
 		update_post_meta( $post_id, '_pac_agenda_location', isset( $_POST['pac_agenda_location'] ) ? sanitize_text_field( wp_unslash( $_POST['pac_agenda_location'] ) ) : '' );
-		update_post_meta( $post_id, '_pac_agenda_status', isset( $_POST['pac_agenda_status'] ) ? sanitize_key( wp_unslash( $_POST['pac_agenda_status'] ) ) : 'upcoming' );
+		update_post_meta( $post_id, '_pac_agenda_status', $status );
 	}
 
 	if ( 'galeri' === $post_type ) {
@@ -263,6 +268,10 @@ function pacipnuippnu_save_meta_boxes( $post_id ) {
 			update_post_meta( $post_id, '_pac_surat_' . $key, $value );
 		}
 		$status = isset( $_POST['pac_surat_status'] ) ? sanitize_key( wp_unslash( $_POST['pac_surat_status'] ) ) : 'menunggu';
+		if ( ! array_key_exists( $status, pacipnuippnu_get_request_statuses() ) ) {
+			$status = 'menunggu';
+		}
+
 		$nomor  = isset( $_POST['pac_surat_nomor'] ) ? sanitize_text_field( wp_unslash( $_POST['pac_surat_nomor'] ) ) : '';
 		if ( 'disetujui' === $status && ! $nomor ) {
 			$nomor = pacipnuippnu_generate_nomor_surat();
